@@ -25,18 +25,19 @@ class DiceRolls:
         return rolls
 
     @staticmethod
-    def check_criteria(rolls: List[int], threshold: int) -> int:
-        return sum(1 for r in rolls if r >= threshold)
+    def check_criteria(rolls: List[int], threshold: int, saver_roll:bool) -> int:
+        if saver_roll:
+            return sum(1 for r in rolls if r<threshold)
+        else:
+            return sum(1 for r in rolls if r >= threshold)
 
     @staticmethod
     def run_experiment(num_dice: int, reroll_option: str, threshold: int, save_roll: bool) -> Tuple[int, int]:
-        if save_roll:
-            reverse = {"1": "6", "6": "1", "positive": "negative", "negative": "positive"}
-            reroll_option = reverse.get(reroll_option, reroll_option)
+
 
         rolls = DiceRolls.roll_dice(num_dice)
         rolls = DiceRolls.reroll_dice(rolls, reroll_option, threshold)
-        return DiceRolls.check_criteria(rolls, threshold), rolls.count(6)
+        return DiceRolls.check_criteria(rolls, threshold, save_roll), rolls.count(6)
 
 
 class DiceSimulatorUI:
